@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список учетных записей</title>
+</head>
+<body>
+<h2>Список учетных записей</h2>
+
+<div th:if="${!users.isEmpty()}" th:each="user : ${users}">
+    <a th:href="@{/users/{id}(id=${user.getId()})}"
+       th:text="${user.getId() + '. ' + user.getLogin() + ' - ' + user.getRole() + '. Is banned - ' + user.getBanned()}"></a>
+</div>
+<br>
+<a th:href="@{/users/new}">Зарегистрировать новую учетную запись</a>
+<br><br>
+<a th:href="@{/}">На главную</a>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация об учетной записи</title>
+</head>
+<body>
+<h2>Информация об учетной записи</h2>
+
+<div th:text="${'Id пользователя: ' + user.getId()}"></div>
+
+<div th:text="${'Логин пользователя: ' + user.getLogin()}"></div>
+
+<div th:text="${'Роль пользователя: ' + user.getRole()}"></div>
+
+<div th:text="${'Забанен: ' + user.getBanned()}"></div>
+<br>
+
+<form method="post"
+      th:action="@{/users/{id} (id=${user.getId()})}">
+    <div th:if="${user.getBanned()}">
+        <input type="submit" value="Разбанить">
+    </div>
+    <div th:if="${!user.getBanned()}">
+        <input type="submit" value="Забанить">
+    </div>
+</form>
+
+<br>
+<a th:href="@{/users}">Назад</a>
+<br><br>
+<a th:href="@{/}">На главную</a>
+</body>
+</html>

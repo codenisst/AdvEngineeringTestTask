@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои задачи</title>
+</head>
+<body>
+<h2>Мои проекты/задачи</h2>
+
+<div th:if="${!tickets.isEmpty()}" th:each="ticket : ${tickets}">
+    <a th:href="@{/{id}(id=${ticket.getId()})}"
+       th:text="${ticket.getId() + '. ' + ticket.getStatus() + ', ' + ticket.getType() + ' - ' + ticket.getName()}"></a>
+</div>
+<div th:if="${tickets.isEmpty()}">
+    Проектов/задач нет.
+</div>
+<br><br>
+<a th:href="@{/}">На главную</a>
+</body>
+</html>

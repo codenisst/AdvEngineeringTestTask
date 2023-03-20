@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Все проекты/задачи</title>
+</head>
+<body>
+<h2>Все проекты/задачи</h2>
+
+<div th:if="${tickets.isEmpty()}">
+    Проектов/задач нет.
+</div>
+
+<div th:if="${!tickets.isEmpty()}">
+    <br>
+    <div th:each="ticket : ${tickets}">
+        <a th:href="@{/{id}(id=${ticket.getId()})}"
+           th:text="${ticket.getId()
+           + '. ' + ticket.getDeleted() + ', ' + authors.get(ticket.getUserId())
+           + ' - ' + ticket.status + ', '  + ticket.getName() + ', '
+           + ticket.getSubscription() + ', ' + ticket.getCreateDate()}"></a>
+
+    </div>
+    <br>
+</div>
+<br><br>
+<a th:href="@{/}">На главную</a>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список проектов/задач</title>
+</head>
+<body>
+<h2>Список проектов/задач</h2>
+
+<!--Список существующих проектов-->
+<div th:if="${!ticketList.isEmpty()}" th:each="ticket : ${ticketList}">
+    <a th:href="@{/{id}(id=${ticket.getId()})}"
+       th:text="${ticket.getId() + '. ' + ticket.getType() + ' - ' + ticket.getName()}"></a>
+</div>
+
+<br><br>
+<a th:href="@{/new}">Создать проект/задачу</a>
+<br><br>
+<div th:if="${role.equals('admin')}">
+    <a th:href="@{/all}">Все проекты/задачи</a>
+    <br><br>
+</div>
+<div th:if="${role.equals('admin')}">
+    <a th:href="@{/users}">Список учетных записей</a>
+    <br><br>
+</div>
+<a th:href="@{/my-tickets}">Мои проекты/задачи</a>
+<br><br>
+<a th:href="@{/logout}">Выйти</a>
+</body>
+</html>

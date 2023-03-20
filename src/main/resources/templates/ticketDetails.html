@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали проекта/задачи</title>
+</head>
+<body>
+
+<h2>Детали проекта/задачи</h2>
+
+<div th:text="${'Id тикета: ' + ticket.getId()}"></div>
+
+<div th:text="${'Автор: ' + author}"></div>
+
+<div th:text="${'Тип тикета: ' + ticket.getType()}"></div>
+
+<div th:if="${ticket.getMainTicketId() != 0}"
+     th:text="${'Основная задача/проект: ' + ticket.getMainTicketId()}"></div>
+
+<div th:text="${'Для кого: ' + ticket.getForType()}"></div>
+
+<div th:text="${'Название: ' + ticket.getName()}"></div>
+
+<div th:text="${'Статус: ' + ticket.getStatus()}"></div>
+
+<div th:text="${'Описание: ' + ticket.getSubscription()}"></div>
+
+<div th:text="${'Дата создания тикета: ' + ticket.getCreateDate()}"></div>
+
+<div th:text="${'Дата изменения статуса тикета: ' + ticket.getStatusChangeDate()}"></div>
+
+<br>
+
+<div th:if="${!nested.isEmpty()}">
+    Вложенные тикеты:
+    <br>
+    <div th:each="ticket : ${nested}">
+        <a th:href="@{/{id}(id=${ticket.getId()})}"
+           th:text="${ticket.getId() + '. ' + ticket.getType() + ' - ' + ticket.getName()}"></a>
+    </div>
+    <br>
+</div>
+
+<!--<a th:href="@{/{id}/edit (id=${ticket.getId()})}">Редактировать </a>-->
+<form method="get"
+      th:if="${user.getId() == ticket.getUserId() || user.getRole().equals('admin')}"
+      th:action="@{/{id}/edit (id=${ticket.getId()})}">
+    <input type="submit" value="Редактировать">
+</form>
+<form method="post"
+      th:if="${user.getId() == ticket.getUserId() || user.getRole().equals('admin')}"
+      th:action="@{/{id} (id=${ticket.getId()})}">
+    <input type="submit" value="Удалить">
+</form>
+<br><br>
+
+<a th:if="${ticket.getMainTicketId() != 0}" th:href="@{/{id}(id=${ticket.getMainTicketId()})}">Назад<br><br></a>
+
+<a th:href="@{/}">На главную</a>
+
+</body>
+</html>
