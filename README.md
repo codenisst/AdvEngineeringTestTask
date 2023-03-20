@@ -15,6 +15,8 @@ date the status was changed.
 Any user can create a task for any level of a project/project, change their status, 
 delete their tasks and view all tasks. Any administrator can edit, delete a task.
 
+Any administrator can create new accounts and ban/unban users.
+
 Security is implemented with Spring Security, access to the database through Spring JPA, 
 the database is H2, SQL-script for creating tables in the database and filling it with test values is 
 attached to the project (*"V1.0__create_table_and_insert_input_data.sql "*), 
@@ -46,6 +48,8 @@ ________________________
 Любой пользователь может создать задачу для любого уровня проекта\
 подпроекта, изменить статус, удалить свою задачу, посмотреть все задачи.
 Любой администратор может редактировать, удалить задачу.
+
+Любой администратор может создавать новые учетные записи и банить/разбанивать пользователей.
 
 Реализована безопасность с помощью Spring Security, доступ к базе данных через Spring JPA, 
 база данных - H2, SQL-скрипт создания таблиц в базе данных и наполнения ее тестовыми
