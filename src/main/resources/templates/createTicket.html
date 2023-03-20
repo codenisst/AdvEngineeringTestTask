@@ -30,7 +30,6 @@
     </select>
 
     <br>
-<!-- TODO реализовать вариант без выбора -->
     <label for="mainTicket">Основной проект/задача: </label>
     <select th:field="*{mainTicketId}" id="mainTicket">
         <tr th:each="ticket : ${ticketFromDB}">

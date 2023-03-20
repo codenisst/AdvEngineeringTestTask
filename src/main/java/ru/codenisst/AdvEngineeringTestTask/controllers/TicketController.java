@@ -2,6 +2,7 @@ package ru.codenisst.AdvEngineeringTestTask.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,8 @@ import ru.codenisst.AdvEngineeringTestTask.models.Ticket;
 import ru.codenisst.AdvEngineeringTestTask.util.TicketValidator;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 public class TicketController extends AbstractController {
@@ -30,8 +33,9 @@ public class TicketController extends AbstractController {
         this.userDao = userDao;
     }
 
+    @Async
     @GetMapping("/{id}")
-    public String getTicketDetailsById(@PathVariable("id") int id, Model model) {
+    public CompletableFuture<String> getTicketDetailsById(@PathVariable("id") int id, Model model) {
         Ticket result = ticketDao.getById(id);
 
         checkIsNull(result);
@@ -43,11 +47,12 @@ public class TicketController extends AbstractController {
         model.addAttribute("author", userDao.getNameById(result.getUserId()));
         model.addAttribute("nested", nestedTickets);
         model.addAttribute("user", getUserFromSession());
-        return "ticketDetails";
+        return CompletableFuture.completedFuture("ticketDetails");
     }
 
+    @Async
     @GetMapping("/new")
-    public String createTicket(Model model) {
+    public CompletableFuture<String> createTicket(Model model) {
         if (!model.containsAttribute("ticket")) {
             model.addAttribute("ticket", new Ticket());
         }
@@ -56,28 +61,30 @@ public class TicketController extends AbstractController {
         ticketList.add(0, new Ticket());
         model.addAttribute("ticketFromDB", ticketList);
 
-        return "createTicket";
+        return CompletableFuture.completedFuture("createTicket");
     }
 
+    @Async
     @PostMapping("/new")
-    public String ticketCreationProcess(@ModelAttribute("ticket") @Valid Ticket ticket,
-                                        BindingResult bindingResult, Model model) {
+    public CompletableFuture<String> ticketCreationProcess(@ModelAttribute("ticket") @Valid Ticket ticket,
+                                                           BindingResult bindingResult, Model model) throws ExecutionException, InterruptedException {
         checkAccessCreationTicket(ticket);
 
         ticketValidator.validate(ticket, bindingResult);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("ticket", ticket);
-            return createTicket(model);
+            return CompletableFuture.completedFuture(createTicket(model).get());
         }
 
         ticket.setUserId(getUserFromSession().getId());
         ticketDao.save(ticket);
-        return "redirect:/";
+        return CompletableFuture.completedFuture("redirect:/");
     }
 
+    @Async
     @GetMapping("/{id}/edit")
-    public String editTicket(@PathVariable("id") int id, Model model) {
+    public CompletableFuture<String> editTicket(@PathVariable("id") int id, Model model) {
         Ticket ticketFromDB = ticketDao.getById(id);
 
         checkAccessEditTicket(ticketFromDB);
@@ -86,13 +93,14 @@ public class TicketController extends AbstractController {
             model.addAttribute("ticket", ticketFromDB);
         }
 
-        return "editTicket";
+        return CompletableFuture.completedFuture("editTicket");
     }
 
+    @Async
     @PostMapping("/{id}/edit")
-    public String ticketChangeProcess(@PathVariable("id") int id,
-                                      @ModelAttribute("ticket") @Valid Ticket ticket,
-                                      BindingResult bindingResult, Model model) {
+    public CompletableFuture<String> ticketChangeProcess(@PathVariable("id") int id,
+                                                         @ModelAttribute("ticket") @Valid Ticket ticket,
+                                                         BindingResult bindingResult, Model model) throws ExecutionException, InterruptedException {
         Ticket updatedTicket = ticketDao.getById(id);
 
         checkAccessEditTicket(updatedTicket);
@@ -114,16 +122,17 @@ public class TicketController extends AbstractController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("ticket", ticket);
-            return editTicket(id, model);
+            return CompletableFuture.completedFuture(editTicket(id, model).get());
         }
 
         ticketDao.save(updatedTicket);
 
-        return "redirect:/{id}";
+        return CompletableFuture.completedFuture("redirect:/{id}");
     }
 
+    @Async
     @PostMapping("/{id}")
-    public String deleteTicket(@PathVariable("id") int id) {
+    public CompletableFuture<String> deleteTicket(@PathVariable("id") int id) {
         Ticket deletedTicket = ticketDao.getById(id);
 
         checkAccessDeleteTicket(deletedTicket);
@@ -139,24 +148,26 @@ public class TicketController extends AbstractController {
             ticketDao.save(ticket);
         }
 
-        return "redirect:/";
+        return CompletableFuture.completedFuture("redirect:/");
     }
 
+    @Async
     @GetMapping("/all")
-    public String getAllTickets(Model model) {
+    public CompletableFuture<String> getAllTickets(Model model) {
         checkAccess();
 
         model.addAttribute("tickets", ticketDao.getAllTickets());
         model.addAttribute("authors", userDao.getAllUsernames());
 
-        return "allTickets";
+        return CompletableFuture.completedFuture("allTickets");
     }
 
+    @Async
     @GetMapping("/my-tickets")
-    public String getAllMyTickets(Model model) {
+    public CompletableFuture<String> getAllMyTickets(Model model) {
 
         model.addAttribute("tickets", ticketDao.getAllUndeletedTicketsByUserId(getUserFromSession().getId()));
 
-        return "personalTicket";
+        return CompletableFuture.completedFuture("personalTicket");
     }
 }

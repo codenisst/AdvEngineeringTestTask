@@ -1,7 +1,11 @@
 package ru.codenisst.AdvEngineeringTestTask.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 import ru.codenisst.AdvEngineeringTestTask.models.Ticket;
 import ru.codenisst.AdvEngineeringTestTask.models.User;
@@ -74,6 +78,16 @@ public abstract class AbstractController {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "Access is denied"
             );
+        }
+    }
+
+    @Controller
+    static class FaviconController {
+
+        @Async
+        @GetMapping("favicon.ico")
+        @ResponseBody
+        void returnNoFavicon() {
         }
     }
 }

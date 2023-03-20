@@ -2,6 +2,7 @@ package ru.codenisst.AdvEngineeringTestTask.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.codenisst.AdvEngineeringTestTask.dao.UserDao;
 import ru.codenisst.AdvEngineeringTestTask.models.User;
 import ru.codenisst.AdvEngineeringTestTask.util.UserValidator;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/users")
@@ -30,54 +34,59 @@ public class UserController extends AbstractController {
         this.userValidator = userValidator;
     }
 
+    @Async
     @GetMapping
-    public String getUsersList(Model model) {
+    public CompletableFuture<String> getUsersList(Model model) {
         checkAccess();
 
         model.addAttribute("users", userDao.getAllUsers());
-        return "usersList";
+        return CompletableFuture.completedFuture("usersList");
     }
 
+    @Async
     @GetMapping("/{id}")
-    public String getUserDetails(@PathVariable("id") int id, Model model) {
+    public CompletableFuture<String> getUserDetails(@PathVariable("id") int id, Model model) {
         checkAccess();
 
         User user = userDao.getById(id);
         checkIsNull(user);
 
         model.addAttribute("user", user);
-        return "userDetails";
+        return CompletableFuture.completedFuture("userDetails");
     }
 
+    @Async
     @GetMapping("/new")
-    public String createNewUser(Model model) {
+    public CompletableFuture<String> createNewUser(Model model) {
         checkAccess();
 
         if (!model.containsAttribute("user")) {
             model.addAttribute("user", new User());
         }
 
-        return "createUser";
+        return CompletableFuture.completedFuture("createUser");
     }
 
+    @Async
     @PostMapping("/new")
-    public String newUserCreationProcess(@ModelAttribute("user") @Valid User user,
-                                         BindingResult bindingResult, Model model) {
+    public CompletableFuture<String> newUserCreationProcess(@ModelAttribute("user") @Valid User user,
+                                                            BindingResult bindingResult, Model model) throws ExecutionException, InterruptedException {
         checkAccess();
 
         userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);
-            return createNewUser(model);
+            return CompletableFuture.completedFuture(createNewUser(model).get());
         }
 
         userDao.save(user);
-        return "redirect:/users";
+        return CompletableFuture.completedFuture("redirect:/users");
     }
 
+    @Async
     @PostMapping("/{id}")
-    public String bannedUser(@PathVariable("id") int id) {
+    public CompletableFuture<String> bannedUser(@PathVariable("id") int id) {
         checkAccess();
 
         User user = userDao.getById(id);
@@ -88,6 +97,6 @@ public class UserController extends AbstractController {
 
         userDao.save(user);
 
-        return "redirect:/users/{id}";
+        return CompletableFuture.completedFuture("redirect:/users/{id}");
     }
 }
