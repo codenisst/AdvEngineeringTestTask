@@ -114,8 +114,8 @@ public class TicketController extends AbstractController {
             updatedTicket.setName(ticket.getName());
         }
 
-        if (!ticket.getSubscription().equals(updatedTicket.getSubscription())) {
-            updatedTicket.setSubscription(ticket.getSubscription());
+        if (!ticket.getDescription().equals(updatedTicket.getDescription())) {
+            updatedTicket.setDescription(ticket.getDescription());
         }
 
         ticketValidator.validate(updatedTicket, bindingResult);

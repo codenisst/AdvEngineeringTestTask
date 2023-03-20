@@ -52,12 +52,12 @@
 
     <br>
 
-    <label for="subscription">Описание проекта/задачи: </label>
+    <label for="description">Описание проекта/задачи: </label>
     <input type="text"
-           th:field="*{subscription}" id="subscription">
+           th:field="*{description}" id="description">
     <div style="color: red"
-         th:if="${#fields.hasErrors('subscription')}"
-         th:errors="*{subscription}">subscription error</div>
+         th:if="${#fields.hasErrors('description')}"
+         th:errors="*{description}">description error</div>
 
     <br><br>
 

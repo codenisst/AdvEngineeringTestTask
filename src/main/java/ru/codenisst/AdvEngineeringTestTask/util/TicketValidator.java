@@ -29,8 +29,8 @@ public class TicketValidator implements Validator {
         if (ticket.getName().equals("")) {
             errors.rejectValue("name", "", "Введи название!");
         }
-        if (ticket.getSubscription().equals("")) {
-            errors.rejectValue("subscription", "", "Введи описание!");
+        if (ticket.getDescription().equals("")) {
+            errors.rejectValue("description", "", "Введи описание!");
         }
         if (!status.contains(ticket.getStatus())) {
             errors.rejectValue("status", "", "Введи корректный статус!");

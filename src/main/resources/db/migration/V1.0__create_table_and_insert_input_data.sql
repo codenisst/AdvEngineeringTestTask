@@ -11,7 +11,7 @@ CREATE TABLE USERS
 
 INSERT INTO USERS(login, password, role)
 VALUES ('admin', 'admin', 'admin'),
-       ('test', 'test', 'user');
+       ('user', 'user', 'user');
 
 create table tickets
 (
@@ -22,7 +22,7 @@ create table tickets
     for_Type           varchar not null,
     name               varchar not null,
     status             varchar not null,
-    subscription       varchar not null,
+    description       varchar not null,
     create_Date        varchar not null,
     status_Change_Date varchar not null,
     deleted            boolean not null default false,
@@ -34,7 +34,7 @@ alter table TICKETS
     add constraint "TICKETS_userId_id_FK"
         foreign key (user_Id) references USERS;
 
-insert into TICKETS(user_Id, type, main_Ticket_Id, for_Type, name, status, subscription, create_Date,
+insert into TICKETS(user_Id, type, main_Ticket_Id, for_Type, name, status, description, create_Date,
                     status_Change_Date)
 values (1, 'Проект', 0, 'Менеджер', 'Проект 1', 'progress', 'Описание проекта 1', '19.03.2023 20:28',
         '19.03.2023 20:28'),

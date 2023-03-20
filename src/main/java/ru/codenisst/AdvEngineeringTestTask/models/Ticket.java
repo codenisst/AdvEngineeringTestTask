@@ -23,7 +23,7 @@ public class Ticket {
     private String forType;            // тип - для менеджера или технического специалиста
     private String name;
     private String status;              // new, progress, done
-    private String subscription;
+    private String description;
     private String createDate;
     private String statusChangeDate;
     private boolean deleted;
@@ -40,7 +40,7 @@ public class Ticket {
         this.name = name;
     }
 
-    public Ticket(int id, int userId, String type, int mainTicket, String forType, String name, String status, String subscription, String createDate, String statusChangeDate, boolean isDeleted) {
+    public Ticket(int id, int userId, String type, int mainTicket, String forType, String name, String status, String description, String createDate, String statusChangeDate, boolean isDeleted) {
         this.id = id;
         this.userId = userId;
         this.type = type;
@@ -48,7 +48,7 @@ public class Ticket {
         this.forType = forType;
         this.name = name;
         this.status = status;
-        this.subscription = subscription;
+        this.description = description;
         this.createDate = createDate;
         this.statusChangeDate = statusChangeDate;
         this.deleted = isDeleted;
@@ -110,12 +110,12 @@ public class Ticket {
         this.status = status;
     }
 
-    public String getSubscription() {
-        return subscription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSubscription(String subscription) {
-        this.subscription = subscription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getCreateDate() {
@@ -151,12 +151,12 @@ public class Ticket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ticket ticket = (Ticket) o;
-        return id == ticket.id && userId == ticket.userId && mainTicketId == ticket.mainTicketId && deleted == ticket.deleted && Objects.equals(type, ticket.type) && Objects.equals(forType, ticket.forType) && Objects.equals(name, ticket.name) && Objects.equals(status, ticket.status) && Objects.equals(subscription, ticket.subscription) && Objects.equals(createDate, ticket.createDate) && Objects.equals(statusChangeDate, ticket.statusChangeDate);
+        return id == ticket.id && userId == ticket.userId && mainTicketId == ticket.mainTicketId && deleted == ticket.deleted && Objects.equals(type, ticket.type) && Objects.equals(forType, ticket.forType) && Objects.equals(name, ticket.name) && Objects.equals(status, ticket.status) && Objects.equals(description, ticket.description) && Objects.equals(createDate, ticket.createDate) && Objects.equals(statusChangeDate, ticket.statusChangeDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, type, mainTicketId, forType, name, status, subscription, createDate, statusChangeDate, deleted);
+        return Objects.hash(id, userId, type, mainTicketId, forType, name, status, description, createDate, statusChangeDate, deleted);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class Ticket {
                 ", forType='" + forType + '\'' + "\n" +
                 ", name='" + name + '\'' + "\n" +
                 ", status='" + status + '\'' + "\n" +
-                ", subscription='" + subscription + '\'' + "\n" +
+                ", description='" + description + '\'' + "\n" +
                 ", createDate=" + createDate + "\n" +
                 ", statusChangeDate=" + statusChangeDate + "\n" +
                 ", isDeleted=" + deleted + "\n" +
